@@ -16,6 +16,7 @@
         <el-button type="primary" @click="search()">搜索</el-button>
         <el-button  @click="clear()">清空</el-button>
         <el-button type="success" @click="add()">添加</el-button>
+        <el-button type="success" @click="审核()">审核博客</el-button>
       </div>
       </div>
       <el-table
@@ -53,6 +54,17 @@
 
       </el-table-column>
       <el-table-column
+        
+        label="状态"
+        width="150">
+        <template slot-scope="scope">
+         
+           <el-tag size="medium" v-if="scope.row.state == 1 ">发布</el-tag>
+           <el-tag size="medium" v-else>未发布</el-tag>
+      </template>
+
+      </el-table-column>
+      <el-table-column
         prop="visit"
         label="浏览数"
         width="150">
@@ -69,11 +81,13 @@
         >
       </el-table-column>
     
-  
+
       <el-table-column label="操作" row-key="id" >
         <template slot-scope="scope">
           <el-button type="success" @click.native.prevent="update(scope.$index, scope.row)">修改</el-button>
-          <el-button type="danger" @click.native.prevent="del(scope.$index, scope.row)">删除</el-button>  
+          <el-button type="danger" @click.native.prevent="del(scope.$index, scope.row)">删除</el-button>
+          <el-button type="primary" v-if="scope.row.state == 2" @click.native.prevent="examine(scope.$index, scope.row,1)">通过</el-button>
+          <el-button type="danger" v-if = "scope.row.state == 1" @click.native.prevent="examine(scope.$index, scope.row,0)">驳回</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -179,6 +193,16 @@ export default {
           },
           add(){
             this.$router.push({path:'/blog/add'})
+          },
+          examine(index, row,state){
+            row.state = state
+            request.post("/blog/add",row).then((res)=>{
+              // this.blog = null;
+              this.$message.success('审核通过')
+             
+          }).catch((e) =>{
+            this.$message.error("审核失败");
+          })
           }
       }
 }

@@ -68,9 +68,9 @@
       width="300"
       >
       <template slot-scope="scope">
-        <el-button
+        <!-- <el-button
           size="mini"
-          @click="handleEdit(scope.$index, scope.row)">修改</el-button>
+          @click="handleEdit(scope.$index, scope.row)">修改</el-button> -->
           <el-button
           size="mini"
           type="danger"
